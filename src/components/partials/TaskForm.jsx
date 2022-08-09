@@ -10,12 +10,16 @@ const TASK_INIT = {
   name: "",
   deadline: "",
 };
-const TaskForm = ({ open, handleClose, addToTask }) => {
+const TaskForm = ({ open, handleClose, addToTask, projectId }) => {
   const [task, setTask] = useState(TASK_INIT);
 
   const handleChange = (e) => {
     let { name, value } = e.target;
     setTask((prev) => ({ ...prev, [name]: value }));
+  };
+  const handleSubmit = () => {
+    task.projectId = projectId;
+    addToTask(task);
   };
 
   return (
@@ -48,7 +52,7 @@ const TaskForm = ({ open, handleClose, addToTask }) => {
         </DialogContent>
         <DialogActions>
           <Button onClick={handleClose}>Cancel</Button>
-          <Button onClick={() => addToTask(task)}>Subscribe</Button>
+          <Button onClick={handleSubmit}>Subscribe</Button>
         </DialogActions>
       </Dialog>
     </div>

@@ -1,6 +1,7 @@
-import { Button, Grid, Typography } from "@mui/material";
+import { Button, Container, Grid } from "@mui/material";
 import { useStoreActions, useStoreState } from "easy-peasy";
 import { useState } from "react";
+import { generate } from "shortid";
 import ProjectDisplay from "../partials/ProjectDisplay";
 import ProjectForm from "../partials/ProjectForm";
 
@@ -20,40 +21,31 @@ const ProjectPage = () => {
   };
 
   const handleFormData = (data) => {
-    console.log(data);
+    data.id = generate();
     addProject(data);
   };
+  console.log(projects);
 
-  projects.length === 0 ?? <Typography>There is no project here</Typography>;
+  // projects.length === 0 ?? <Typography>There is no project here</Typography>;
 
   return (
-    <Grid spacing={2} container>
-      {projects?.map((item) => (
-        <ProjectDisplay key={item.id} project={item} />
-      ))}
-      <Grid
-        item
-        md={4}
-        sx={{
-          boxShadow: "0px 0px 10px #ddd",
-          padding: "10px",
-          border: "1px solid #ddd",
-          boxSizing: "border-box",
-          alignItems: "center",
-          display: "flex",
-          justifyContent: "center",
-        }}
-      >
-        <Button variant="contained" onClick={handleClickOpen}>
-          Create A new Project
-        </Button>
-        <ProjectForm
-          open={open}
-          handleClose={handleClose}
-          handleFormData={handleFormData}
-        />
+    <Container maxWidth="lg">
+      <Grid container spacing={2}>
+        {projects?.map((item) => (
+          <ProjectDisplay key={item.id} project={item} />
+        ))}
+        <Grid item md={4}>
+          <Button variant="contained" onClick={handleClickOpen}>
+            Create A new Project
+          </Button>
+          <ProjectForm
+            open={open}
+            handleClose={handleClose}
+            handleFormData={handleFormData}
+          />
+        </Grid>
       </Grid>
-    </Grid>
+    </Container>
   );
 };
 

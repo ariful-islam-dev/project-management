@@ -11,10 +11,7 @@ const model = {
     ],
     tasks:[],
     addProject: action((state, payload)=>{
-        (prev=>([
-            ...prev,
-            payload
-        ]))
+       state.projects.push(payload)
     }),
 
     addTask : action((state, payload)=>{
