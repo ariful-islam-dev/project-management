@@ -1,28 +1,38 @@
-import { TextField } from "@mui/material";
+import { DialogContent, TextField } from "@mui/material";
 import Button from "@mui/material/Button";
 import Dialog from "@mui/material/Dialog";
 import DialogActions from "@mui/material/DialogActions";
-import DialogContent from "@mui/material/DialogContent";
 import DialogTitle from "@mui/material/DialogTitle";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
-const INIT_STATE = {
-  title: "",
-  description: "",
-  deadline: "",
-};
+const ProjectForm = ({
+  open,
+  handleClose,
+  handleFormData,
+  title = "Create New",
+  init = {},
+}) => {
+  const [state, setState] = useState();
 
-const ProjectForm = ({ open, handleClose, handleFormData }) => {
-  const [project, setProject] = useState(INIT_STATE);
+  useEffect(() => {
+    Object.entries(init).map(([key, value]) => {
+      setState((prev) => ({
+        ...prev,
+        [key]: value.value,
+      }));
+    });
+  }, []);
+
   const handleChange = (e) => {
     let { name, value } = e.target;
-    setProject((prev) => ({
+    setState((prev) => ({
       ...prev,
       [name]: value,
     }));
   };
   const handleSubmit = () => {
-    handleFormData(project);
+    handleFormData(state);
+    handleClose();
   };
   return (
     <div>
@@ -32,29 +42,22 @@ const ProjectForm = ({ open, handleClose, handleFormData }) => {
         onClose={handleClose}
         aria-describedby="alert-dialog-slide-description"
       >
-        <DialogTitle>Create A New Project</DialogTitle>
+        <DialogTitle>{title}</DialogTitle>
         <DialogContent>
-          <TextField
-            type={"text"}
-            name="title"
-            fullWidth
-            aria-label="Project Title"
-            onChange={handleChange}
-          />
-          <TextField
-            type={"text"}
-            name="description"
-            fullWidth
-            aria-label="Project Description"
-            onChange={handleChange}
-          />
-          <TextField
-            type={"date"}
-            name="deadline"
-            fullWidth
-            aria-label="Project Deadline"
-            onChange={handleChange}
-          />
+          {Object.entries(init).map(([key, value]) => (
+            <TextField
+              key={key}
+              type={value.type}
+              label={value.label}
+              name={key}
+              color="success"
+              fullWidth
+              focused
+              onChange={handleChange}
+              variant="standard"
+              sx={{ marginBottom: "10px" }}
+            />
+          ))}
         </DialogContent>
         <DialogActions>
           <Button type="submit" onClick={handleSubmit}>
